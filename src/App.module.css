@@ -1,3 +1,35 @@
-.App {
 
+.App {
+    flex-grow: 1;
+    margin: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.App .view {
+    display: flex;
+    height: 50%;
+    flex-basis: 100%;
+}
+
+.left, .right {
+    overflow-y: scroll;
+}
+
+.left {
+    flex-basis: 60%;
+}
+
+.right {
+    border-left: 1px solid var(--border-color);
+    padding-left: 20px;
+    margin-left: 20px;
+    flex-basis: 40%;
+}
+
+.locationswitcher {
+    display: flex;
+    gap: 15px;
+    /* padding-top: 20px; */
+    padding-bottom: 40px;
 }

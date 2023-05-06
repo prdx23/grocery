@@ -1,0 +1,25 @@
+
+
+.itemlist {
+}
+
+.itemlist ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.itemlist ul li {
+    padding: 0;
+}
+
+.itemlist .empty {
+    margin-left: 75px;
+}
+.itemlist .heading {
+    margin: 0;
+    margin-left: 75px;
+    margin-bottom: 15px;
+    font-size: 28px;
+    color: var(--text-bright-color);
+}
