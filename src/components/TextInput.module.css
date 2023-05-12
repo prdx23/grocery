@@ -1,0 +1,35 @@
+
+
+.textinput_container .display {
+    border: 1px solid #00000000;
+    padding: 0;
+    background: none;
+    min-height: 28px;
+    text-align: left;
+}
+
+.textinput_container .display:hover {
+    border: 1px dashed var(--border-color);
+    color: var(--text-color);
+}
+
+.textinput_container .text,
+.textinput_container input {
+    margin: 0;
+    padding: 4px 8px;
+    font-family: var(--font-family);
+}
+
+
+.textinput_container .edit {
+    display: flex;
+    width: 100%;
+}
+
+.textinput_container .edit input {
+    flex-basis: 100%;
+}
+
+.textinput_container .edit button {
+    margin-left: 5px;
+}

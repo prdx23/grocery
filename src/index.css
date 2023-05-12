@@ -1,9 +1,9 @@
 @font-face {
-    font-family: 'Inter';
+    font-family: 'IBM Plex Mono';
     font-display: swap;
     font-weight: 400;
     font-style: normal;
-    src: url('Inter-VariableFont_slnt,wght.ttf');
+    src: url('IBMPlexMono-Regular.ttf');
 }
 
 
@@ -30,6 +30,9 @@
     --slider-bg: #989daa;
     --button-active: #989daa;
     --button-inactive: #0b0b13;
+
+    --button-padding: 4px 8px;
+    --font-family: 'IBM Plex Mono', monospace;
 }
 
 
@@ -37,7 +40,7 @@ html {
     font-size: 16px;
     color: var(--text-color);
     background: var(--background);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-family);
 }
 
 
@@ -61,7 +64,7 @@ button {
     cursor: pointer;
     outline: inherit;
 
-    padding: 4px 8px;
+    padding: var(--button-padding);
     border: 1px solid var(--border-color);
     background: var(--button-inactive);
 }
@@ -73,7 +76,7 @@ button:hover {
 }
 
 input[type="text"] {
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     background-color: var(--slider-bg);
     /* color: var(--button-inactive); */
     color: var(--background);
@@ -112,3 +115,23 @@ input[type="radio"]:checked::before {
 label {
     white-space: nowrap;
 }
+
+.iconbtn {
+    --button-padding: 8px 8px;
+    height: 28px;
+}
+
+.iconbtn svg {
+    width: 10px;
+    height: 10px;
+    display: block;
+}
+
+.iconbtn svg path {
+    fill: var(--text-color);
+}
+
+.iconbtn:hover svg path {
+    fill: var(--button-inactive);
+}
+

@@ -14,16 +14,6 @@
     border-bottom: 1px solid var(--border-color);
 }
 
-.additemview p {
-    margin: 4px 0px;
-}
-
-
 .additemview input[type='text'] {
-    padding: 4px 4px;
     width: 500px;
-}
-
-.additemview .countbtn {
-    width: 32px;
 }

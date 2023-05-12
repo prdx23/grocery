@@ -1,67 +1,24 @@
 
-.item, .item input {
-    /* font-size: 20px; */
-}
-
-
 .item {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 5px;
 
     border: 1px solid #00000000;
     padding: 5px;
 }
 
-.item:hover .name {
-    text-decoration: underline;
-}
-
-.item p {
-    /* margin: 0; */
-    margin: 4px 0px;
-}
-
-
-.item .count {
-    min-width: 50px;
-    text-align: right;
-}
-
-
-.item .count::after {
-    content: 'x';
-    color: var(--text-faded-color);
-    padding-left: 2px;
-}
-
-
 
 .item .name {
-    margin-right: auto;
+    /* margin-right: auto; */
+    flex-basis: 100%;
 }
 
 
-.item .edit {
+.item .action {
     visibility: hidden;
     white-space: nowrap;
 }
-.item:hover .edit {
+.item:hover .action {
     visibility: visible;
-}
-
-
-.item .editcount {
-    flex-shrink: 0;
-    display: flex;
-}
-
-.item .editcount button {
-    padding: 0px;
-    width: 32px;
-}
-
-.item input {
-    padding: 4px 4px;
-    width: 100%;
 }

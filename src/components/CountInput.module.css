@@ -1,0 +1,43 @@
+
+
+.count_container {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.count_container .edit,
+.count_container .display,
+.count_container .editonly {
+    border: 1px solid #00000000;
+    padding: 0;
+    background: none;
+    display: flex;
+    align-items: center;
+    height: 28px;
+}
+
+.count_container .edit {
+    border: 1px dashed var(--border-color);
+}
+
+.count_container .edit:hover {
+    border: 1px dashed var(--slider-bg);
+    color: var(--text-color);
+}
+
+.count_container .display:hover {
+    border: 1px dashed var(--border-color);
+    color: var(--text-color);
+}
+
+.count_container .number {
+    margin: 0;
+    padding: 0px 8px;
+}
+
+.count_container .number::after {
+    content: 'x';
+    color: var(--text-faded-color);
+}
