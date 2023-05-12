@@ -1,10 +1,10 @@
+
 import { For } from 'solid-js';
 
-import styles from './ItemList.module.css';
-
+import { Items } from './Item'
 import type { Item, LocationString } from './Item'
-import { Items, ItemView } from './Item'
-
+import { ItemView } from './ItemView'
+import styles from './css/ItemList.module.css';
 
 
 const ItemList = (props: { location: LocationString }) => {

@@ -1,6 +1,7 @@
+
 import { createSignal, Switch, Match } from 'solid-js';
 
-import styles from './TextInput.module.css';
+import styles from './css/TextInput.module.css';
 
 
 type TextInputProps = {

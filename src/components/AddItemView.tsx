@@ -1,11 +1,11 @@
+
 import { createSignal, batch } from 'solid-js';
 
-import styles from './AddItemView.module.css';
-
 import { Items } from './Item'
+import type { LocationString } from './Item'
 import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
-import type { LocationString } from './Item'
+import styles from './css/AddItemView.module.css';
 
 
 const AddItemView = () => {
@@ -54,7 +54,6 @@ const AddItemView = () => {
         <button> Add </button>
     </form>
 };
-
 
 export default AddItemView;
 
