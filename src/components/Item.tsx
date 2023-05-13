@@ -6,12 +6,14 @@ import styles from './Item.module.css';
 
 
 export type LocationString = 'inventory' | 'shopping_list' | 'archive'
+export type ExpiryDate = Date | 'none'
 
 export type Item = {
     id: string,
     name: string,
     count: number,
     location: LocationString,
+    expiry: ExpiryDate,
 }
 
 type ItemStore = Record<string, Item>
@@ -66,13 +68,17 @@ export class Items {
 
     // -------------------------------------------------------------
 
-    static add(name: string, count: number, location?: LocationString) {
+    static add(
+        name: string, count: number,
+        location?: LocationString, expiry?: ExpiryDate
+    ) {
         const id = `${Date.now().toString(16)}-${Math.floor(Math.random()*9999)}`
         this.setItems(id, {
             id: id,
             name: name,
             count: Math.max(Math.min(count, 99), 1),
             location: location ? location : 'inventory',
+            expiry: expiry ? expiry : 'none',
         });
         this.save()
     }
@@ -94,6 +100,11 @@ export class Items {
 
     static changeLocation(id: string, location: LocationString) {
         this.setItems(id, 'location', location)
+        this.save()
+    }
+
+    static updateExpiry(id: string, expiry: ExpiryDate) {
+        this.setItems(id, 'expiry', expiry)
         this.save()
     }
 }

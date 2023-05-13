@@ -1,6 +1,7 @@
 
 import { createSignal, Switch, Match } from 'solid-js';
 
+import icons from '../icons';
 import styles from './css/TextInput.module.css';
 
 
@@ -52,9 +53,7 @@ export const TextInput = (props: TextInputProps) => {
             <div class={styles.edit}>
                 { textbox }
                 <button type='button' class='iconbtn' onclick={toggle}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
-                        <path d="M21.711 2.408 9.424 14.695l-4.677-4.677L.07 14.695l4.677 4.678 4.677 4.677 4.677-4.677L26.39 7.086Z"/>
-                    </svg>
+                    { icons.tick() }
                 </button>
             </div>
         </Match>

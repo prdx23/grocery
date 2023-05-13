@@ -16,6 +16,9 @@ const App: Component = () => {
     ] = createSignal<LocationString>('inventory')
 
     return <main class={styles.App}>
+
+        <div id='modal'></div>
+
         <AddItemView />
 
         <section class={styles.locationswitcher}>

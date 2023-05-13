@@ -1,30 +1,33 @@
 
 import { createSignal, Show } from 'solid-js';
+import { add, differenceInCalendarDays } from 'date-fns'
 
 import { Items } from './Item';
-import type { Item } from './Item';
+import type { Item, ExpiryDate } from './Item';
 import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
+import { ExpiryInput } from './ExpiryInput';
+import icons from '../icons';
 import styles from './css/ItemView.module.css';
 
 
 
 export const ItemView = (props: { item: Item }) => {
 
-    const updateCount = (x: number) => { Items.updateCount(props.item.id, x) }
-    const updateName = (x: string) => { Items.updateName(props.item.id, x) }
+    function updateCount(x: number) { Items.updateCount(props.item.id, x) }
+    function updateName(x: string) { Items.updateName(props.item.id, x) }
+    function updateExpiry(x: ExpiryDate) { Items.updateExpiry(props.item.id, x) }
+    function deleteItem() { Items.delete(props.item.id) }
 
-    const deleteItem = () => { Items.delete(props.item.id) }
-
-    const moveToInventory = () => {
+    function moveToInventory() {
         Items.changeLocation(props.item.id, 'inventory')
     }
 
-    const addToShoppingList = () => {
-        Items.add(props.item.name, 1,'shopping_list')
+    function addToShoppingList() {
+        Items.add(props.item.name, 1, 'shopping_list')
     }
 
-    const moveToArchive = () => {
+    function moveToArchive() {
         setMode('msg')
         setTimeout(() => {
             Items.changeLocation(props.item.id, 'archive')
@@ -35,19 +38,53 @@ export const ItemView = (props: { item: Item }) => {
     type ViewModes = 'view' | 'msg'
     const [ mode, setMode ] = createSignal<ViewModes>('view')
 
-    return <section class={styles.item}>
+    function itemClass() {
+        let cls = styles.item
+        if( props.item.expiry != 'none' && props.item.location != 'shopping_list' ) {
+            const days = differenceInCalendarDays(
+                new Date(props.item.expiry), new Date()
+            )
+            if( days <= 0 ) { cls += ' ' + styles.expired }
+            if( days <= 4 ) { cls += ' ' + styles.expire_warning }
+        }
+        return cls
+    }
+
+    return <section class={itemClass()}>
 
         <Show when={ mode() === 'msg' }>
-            <p style='margin: 0; margin-left: 93px'> Item archived! </p>
+            <p style='margin: 0; margin-left: 73px'> Item archived! </p>
         </Show>
 
         <Show when={ mode() === 'view' }>
 
             <Show when={props.item.location !== 'archive'}>
-                <button type='button' class={styles.action + ' iconbtn'} onclick={moveToArchive}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
-                        <path d="M9.922-2.172V9.922H-2.172v6.614H9.922v12.095h6.614V16.536h12.095V9.922H16.536V-2.172z" transform="rotate(45 13.23 13.23)"/>
-                    </svg>
+                <button
+                    class={styles.action + ' iconbtn'}
+                    onclick={moveToArchive}
+                    title='Archive Item'
+                >
+                    { icons.cross() }
+                </button>
+            </Show>
+
+            <Show when={['inventory', 'archive'].includes(props.item.location)}>
+                <button
+                    class={styles.action + ' iconbtn ' + styles.cartbtn}
+                    onclick={addToShoppingList}
+                    title={'Add to ' + Items.locationDisplay('shopping_list')}
+                >
+                    { icons.cart() }
+                </button>
+            </Show>
+
+            <Show when={['shopping_list', 'archive'].includes(props.item.location)}>
+                <button
+                    class={styles.action + ' iconbtn'}
+                    onclick={moveToInventory}
+                    title={'Move to ' + Items.locationDisplay('inventory')}
+                >
+                    { icons.tick() }
                 </button>
             </Show>
 
@@ -58,18 +95,9 @@ export const ItemView = (props: { item: Item }) => {
             <CountInput value={props.item.count} onchange={updateCount} />
             <TextInput class={styles.name} value={props.item.name} onchange={updateName} />
 
-            <Show when={['inventory', 'archive'].includes(props.item.location)}>
-                <button class={styles.action} onclick={addToShoppingList}>
-                    Add to { Items.locationDisplay('shopping_list') }
-                </button>
+            <Show when={props.item.location !== 'shopping_list'}>
+                <ExpiryInput class={styles.action} value={props.item.expiry} onchange={updateExpiry} />
             </Show>
-
-            <Show when={['shopping_list', 'archive'].includes(props.item.location)}>
-                <button class={styles.action} onclick={moveToInventory}>
-                    Move to { Items.locationDisplay('inventory') }
-                </button>
-            </Show>
-
         </Show>
 
     </section>

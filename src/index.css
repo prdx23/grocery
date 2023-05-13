@@ -119,6 +119,7 @@ label {
 .iconbtn {
     --button-padding: 8px 8px;
     height: 28px;
+    width: 28px;
 }
 
 .iconbtn svg {

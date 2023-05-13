@@ -1,6 +1,7 @@
 
 import { createSignal, Show, Switch, Match } from 'solid-js';
 
+import icons from '../icons';
 import styles from './css/CountInput.module.css';
 
 
@@ -25,26 +26,18 @@ export const CountInput = (props: CountProps) => {
         props.onchange(props.value > 1 ? props.value - 1 : 1);
     }
 
-    const minus = <button type='button' onclick={decCount} class='iconbtn'>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
-            <path d="M9.922-26.458h6.614V0H9.922Z" transform="rotate(90)"/>
-        </svg>
-    </button>
-
-    const plus = <button type='button' onclick={incCount} class='iconbtn'>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
-            <path d="M9.922 0v9.922H0v6.614h9.922v9.922h6.614v-9.922h9.922V9.922h-9.922V0H9.922z"/>
-        </svg>
-    </button>
-
     return <div class={styles.count_container + ' ' + props.class}> <Switch>
 
         <Match when={props.editonly}>
-            { minus }
+            <button type='button' onclick={decCount} class='iconbtn'>
+                { icons.minus() }
+            </button>
             <div class={styles.editonly}>
                 <p class={styles.number}>{ props.value }</p>
             </div>
-            { plus }
+            <button type='button' onclick={incCount} class='iconbtn'>
+                { icons.plus() }
+            </button>
         </Match>
 
         <Match when={!edit()}>
@@ -57,13 +50,17 @@ export const CountInput = (props: CountProps) => {
         </Match>
 
         <Match when={edit()}>
-            { minus }
+            <button type='button' onclick={decCount} class='iconbtn'>
+                { icons.minus() }
+            </button>
             <button type='button' class={styles.edit} onclick={toggle}>
                 <p class={styles.number}>
                     { props.value.toString().padStart(2, '0') }
                 </p>
             </button>
-            { plus }
+            <button type='button' onclick={incCount} class='iconbtn'>
+                { icons.plus() }
+            </button>
         </Match>
 
     </Switch> </div>

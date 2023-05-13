@@ -13,7 +13,7 @@
 }
 
 .left, .right {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .left {

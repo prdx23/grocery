@@ -2,9 +2,10 @@
 import { createSignal, batch } from 'solid-js';
 
 import { Items } from './Item'
-import type { LocationString } from './Item'
+import type { LocationString, ExpiryDate } from './Item'
 import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
+import { ExpiryInput } from './ExpiryInput';
 import styles from './css/AddItemView.module.css';
 
 
@@ -13,20 +14,25 @@ const AddItemView = () => {
     const [ name, setName ] = createSignal('')
     const [ count, setCount ] = createSignal(1)
     const [ location, setLocation ] = createSignal<LocationString>('inventory')
+    const [ expiry, setExpiry ] = createSignal<ExpiryDate>('none')
 
     function addItem(e: SubmitEvent) {
         e.preventDefault()
         batch(() => {
-            Items.add(name(), count(), location())
+            Items.add(name(), count(), location(), expiry())
             setName('')
             setCount(1)
+            setExpiry('none')
         })
     }
 
     return <form class={styles.additemview} onsubmit={addItem}>
 
         <CountInput editonly={true} value={count()} onchange={setCount} />
+
         <TextInput editonly={true} value={name()} onchange={setName} />
+
+        <ExpiryInput editonly={true} value={expiry()} onchange={setExpiry} />
 
         <input
             type='radio'

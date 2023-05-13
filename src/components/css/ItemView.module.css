@@ -3,15 +3,24 @@
     display: flex;
     align-items: center;
     gap: 5px;
-
     border: 1px solid #00000000;
-    padding: 5px;
 }
 
 
 .item .name {
-    /* margin-right: auto; */
     flex-basis: 100%;
+}
+
+.expire_warning .name * {
+    color: orange !important;
+}
+
+.expired .name * {
+    color: red !important;
+}
+
+.expired .name p::before {
+    content: '[Expired] ';
 }
 
 
@@ -21,4 +30,17 @@
 }
 .item:hover .action {
     visibility: visible;
+}
+
+.item:focus-within .action {
+    visibility: visible;
+}
+
+
+.item .cartbtn {
+    --button-padding: 6px 6px;
+}
+.item .cartbtn svg {
+    width: 14px;
+    height: 14px;
 }
