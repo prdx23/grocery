@@ -2,7 +2,7 @@
 import { createSignal, batch } from 'solid-js';
 
 import { Items } from './Item'
-import type { LocationString, ExpiryDate } from './Item'
+import type { ExpiryDate } from './Item'
 import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
 import { ExpiryInput } from './ExpiryInput';
@@ -13,13 +13,15 @@ const AddItemView = () => {
 
     const [ name, setName ] = createSignal('')
     const [ count, setCount ] = createSignal(1)
-    const [ location, setLocation ] = createSignal<LocationString>('inventory')
+    const [ location, setLocation ] = createSignal('Inventory')
     const [ expiry, setExpiry ] = createSignal<ExpiryDate>('none')
 
     function addItem(e: SubmitEvent) {
         e.preventDefault()
         batch(() => {
-            Items.add(name(), count(), location(), expiry())
+            Items.add(location(), {
+                name: name(), count: count(), expiry: expiry()
+            })
             setName('')
             setCount(1)
             setExpiry('none')
@@ -40,22 +42,18 @@ const AddItemView = () => {
             id='inventory-radio'
             value='inventory'
             checked
-            onclick={() => setLocation('inventory')}
+            onclick={() => setLocation('Inventory')}
         />
-        <label for='inventory-radio'>
-            { Items.locationDisplay('inventory') }
-        </label>
+        <label for='inventory-radio'> Inventory </label>
 
         <input
             type='radio'
             name='location'
             id='shopping_list-radio'
             value='shopping_list'
-            onclick={() => setLocation('shopping_list')}
+            onclick={() => setLocation('Shopping List')}
         />
-        <label for='shopping_list-radio'>
-            { Items.locationDisplay('shopping_list') }
-        </label>
+        <label for='shopping_list-radio'> Shopping List </label>
 
         <button> Add </button>
     </form>
