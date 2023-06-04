@@ -1,11 +1,19 @@
 import { onCleanup, onMount } from "solid-js"
 
 
-export function onLoseFocus(node: HTMLElement, func: () => void) {
+declare module "solid-js" {
+    namespace JSX {
+        interface Directives {
+            onLoseFocus: () => void
+        }
+    }
+}
+
+
+export function onLoseFocusDirective(node: Element, func: () => () => void) {
     function handleClick(event: Event) {
-        if( event.target != node ) { func() }
+        if( !node.contains(event.target as Node) ) { func()() }
     }
     onMount(() => document.addEventListener('click', handleClick, true))
     onCleanup(() => document.removeEventListener('click', handleClick, true))
 }
-

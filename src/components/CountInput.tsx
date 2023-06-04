@@ -1,68 +1,75 @@
 
-import { createSignal, Show, Switch, Match } from 'solid-js';
+import { Component, createSignal, Show } from 'solid-js';
 
 import icons from '../icons';
 import styles from './css/CountInput.module.css';
+import { onLoseFocusDirective } from '../utils';
+const onLoseFocus = onLoseFocusDirective
 
 
 type CountProps = {
     value: number,
     onchange: (value: number) => void,
     editonly?: boolean,
-    class?: string,
 }
+export const CountInput: Component<CountProps> = (props) => {
 
-
-export const CountInput = (props: CountProps) => {
-
-    const [ edit, setEdit ] = createSignal(!!props.editonly);
-    function toggle() { if( !props.editonly ) { setEdit((prev) => !prev); } }
-
-    function incCount() {
-        props.onchange(props.value < 99 ? props.value + 1 : 99);
+    function IncButton(p: {x: number, show: boolean}) {
+        return <button
+            type='button'
+            class='iconbtn'
+            style={p.show ? 'display: inherit' : 'display: none'}
+            onclick={() => props.onchange(p.x < 99 ? p.x + 1 : 99)}
+        >
+            { icons.plus() }
+        </button>
     }
 
-    function decCount() {
-        props.onchange(props.value > 1 ? props.value - 1 : 1);
+    function DecButton(p: {x: number, show: boolean}) {
+        return <button
+            type='button'
+            class='iconbtn'
+            style={p.show ? 'display: inherit' : 'display: none'}
+            onclick={() => props.onchange(p.x > 1 ? p.x - 1 : 1)}
+        >
+            { icons.minus() }
+        </button>
     }
 
-    return <div class={styles.count_container + ' ' + props.class}> <Switch>
-
-        <Match when={props.editonly}>
-            <button type='button' onclick={decCount} class='iconbtn'>
-                { icons.minus() }
-            </button>
+    if( props.editonly ) {
+        return <div class={styles.count_container}>
+            <DecButton x={props.value} show={true} />
             <div class={styles.editonly}>
                 <p class={styles.number}>{ props.value }</p>
             </div>
-            <button type='button' onclick={incCount} class='iconbtn'>
-                { icons.plus() }
-            </button>
-        </Match>
+            <IncButton x={props.value} show={true} />
+        </div>
+    }
 
-        <Match when={!edit()}>
-            <div style='display: flex;'>
-                <Show when={ props.value < 10 }>&nbsp;</Show>
-                <button type='button' class={styles.display} onclick={toggle}>
-                    <p class={styles.number}>{ props.value }</p>
-                </button>
-            </div>
-        </Match>
 
-        <Match when={edit()}>
-            <button type='button' onclick={decCount} class='iconbtn'>
-                { icons.minus() }
-            </button>
-            <button type='button' class={styles.edit} onclick={toggle}>
-                <p class={styles.number}>
-                    { props.value.toString().padStart(2, '0') }
-                </p>
-            </button>
-            <button type='button' onclick={incCount} class='iconbtn'>
-                { icons.plus() }
-            </button>
-        </Match>
+    const [ selected, setSelected ] = createSignal(false)
+    function toggle() { setSelected(prev => !prev) }
 
-    </Switch> </div>
+    const displayValue = () => {
+        if( !selected() ) { return props.value }
+        return props.value.toString().padStart(2, '0')
+    }
 
+    const displayClass = () => {
+        return { [styles.display]: !selected(), [styles.edit]: selected() }
+    }
+
+    return <div
+        class={styles.count_container}
+        use:onLoseFocus={() => setSelected(false)}
+    >
+        <DecButton x={props.value} show={selected()} />
+        <div style='display: flex;'>
+            <Show when={ !selected() && props.value < 10 }>&nbsp;</Show>
+            <button type='button' classList={displayClass()} onclick={toggle}>
+                <p class={styles.number}>{displayValue()}</p>
+            </button>
+        </div>
+        <IncButton x={props.value} show={selected()} />
+    </div>
 }

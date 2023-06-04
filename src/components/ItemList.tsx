@@ -15,7 +15,7 @@ const ItemList: Component<{ location: string }> = (props) => {
         <ul>
             <For each={Items.list(props.location)} fallback={empty}>
                 { (item, i) => <li>
-                    <ItemView item={item} index={i()} />
+                    <ItemView item={item} id={i()} location={props.location} />
                 </li> }
             </For>
         </ul>

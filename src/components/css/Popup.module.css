@@ -1,0 +1,17 @@
+
+.popup_container {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popup_container span {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: #6d709d;
+    color: var(--background);
+}

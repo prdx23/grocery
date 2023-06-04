@@ -6,7 +6,7 @@ import ItemList from './components/ItemList';
 import AddItemView from './components/AddItemView';
 import { Items } from './components/Item'
 import icons from './icons';
-// import type { LocationString } from './components/Item'
+import { Popup } from './components/Popup';
 
 
 const App: Component = () => {
@@ -22,7 +22,7 @@ const App: Component = () => {
 
     return <main class={styles.App}>
 
-        {/* <div id='modal'></div> */}
+        <Popup />
 
         <AddItemView />
 

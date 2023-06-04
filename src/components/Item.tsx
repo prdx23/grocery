@@ -55,32 +55,10 @@ export class Items {
     }
 
 
-//     static addLocation(location: string) {
-//     check total locations limit
-//         if( this.items[location] !== undefined ) {
-//             console.error(`location ${location} already exists`)
-//             return
-//         }
-//         this.setItems(location, [])
-//         this.save()
-//     }
-
-//     static deleteLocation(location: string) {
-//         if( this.items[location] === undefined ) {
-//             console.error(`location ${location} does not exist`)
-//             return
-//         }
-//         this.setItems(location, undefined!)
-//         this.save()
-//     }
-
-
     static add(location: string, newItem: Item) {
 
         if( this.items[location] === undefined ) {
             console.error(`location ${location} does not exist`)
-            // this.setItems(location, [newItem])
-            // this.save()
             return
         }
 
@@ -120,6 +98,46 @@ export class Items {
         this.setItems(location, id, 'expiry', expiry)
         this.save()
     }
+
+    static moveUp(location: string, id: number) {
+        if( id == 0 ) { return }
+        this.setItems(produce(state => {
+            const temp = state[location][id - 1]
+            state[location][id - 1] = state[location][id]
+            state[location][id] = temp
+        }))
+        this.save()
+    }
+
+    static moveDown(location: string, id: number) {
+        if( id == this.items[location].length - 1 ) { return }
+        this.setItems(produce(state => {
+            const temp = state[location][id + 1]
+            state[location][id + 1] = state[location][id]
+            state[location][id] = temp
+        }))
+        this.save()
+    }
+
+
+//     static addLocation(location: string) {
+//     check total locations limit
+//         if( this.items[location] !== undefined ) {
+//             console.error(`location ${location} already exists`)
+//             return
+//         }
+//         this.setItems(location, [])
+//         this.save()
+//     }
+
+//     static deleteLocation(location: string) {
+//         if( this.items[location] === undefined ) {
+//             console.error(`location ${location} does not exist`)
+//             return
+//         }
+//         this.setItems(location, undefined!)
+//         this.save()
+//     }
 
 }
 

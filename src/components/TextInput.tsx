@@ -1,8 +1,10 @@
 
-import { createSignal, Switch, Match } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
 
 import icons from '../icons';
 import styles from './css/TextInput.module.css';
+import { onLoseFocusDirective } from '../utils';
+const onLoseFocus = onLoseFocusDirective
 
 
 type TextInputProps = {
@@ -11,53 +13,59 @@ type TextInputProps = {
     editonly?: boolean,
     class?: string,
 }
+export const TextInput: Component<TextInputProps> = (props) => {
 
-
-export const TextInput = (props: TextInputProps) => {
-
-    let input: HTMLInputElement
-
-    const [ edit, setEdit ] = createSignal(!!props.editonly);
-    function toggle() {
-        if( !props.editonly ) {
-            setEdit((prev) => !prev);
-            if( edit() == true ) { input.focus() }
-        }
+    if( props.editonly ) {
+        return <div class={styles.textinput_container + ' ' + props.class}>
+            <div class={styles.edit}>
+                <input
+                    type='text'
+                    required
+                    placeholder='Item Name'
+                    value={ props.value }
+                    oninput={(e) => props.onchange(e.target.value)}
+                />
+            </div>
+        </div>
     }
 
-    const textbox = <input
-        type='text'
-        required
-        placeholder='Item Name'
-        value={ props.value }
-        oninput={(e) => props.onchange(e.target.value)}
-        onkeyup={(e) => { if(e.key == 'Enter') {toggle()} }}
-        ref={input!}
-    />
+    let input: HTMLInputElement
+    const [ selected, setSelected ] = createSignal(false)
+    function deselect() { setSelected(false) }
+    function select() {
+        setSelected(true)
+        input.focus()
+    }
 
-    return <div class={styles.textinput_container + ' ' + props.class}> <Switch>
+    return <div
+        class={styles.textinput_container + ' ' + props.class}
+        use:onLoseFocus={deselect}
+    >
+        <button
+            type='button'
+            class={styles.display}
+            style={selected() ? 'display: none' : 'display: inherit'}
+            onclick={select}
+        >
+            <p class={styles.text}>{ props.value }</p>
+        </button>
 
-        <Match when={props.editonly}>
-            <div class={styles.edit}>
-                { textbox }
-            </div>
-        </Match>
-
-        <Match when={!edit()}>
-            <button type='button' class={styles.display} onclick={toggle}>
-                <p class={styles.text}>{ props.value }</p>
+        <div
+            class={styles.edit}
+            style={!selected() ? 'display: none' : 'display: flex'}
+        >
+            <input
+                type='text'
+                required
+                placeholder='Item Name'
+                value={ props.value }
+                oninput={(e) => props.onchange(e.target.value)}
+                onkeyup={(e) => { if(e.key == 'Enter') {deselect()} }}
+                ref={input!}
+            />
+            <button type='button' class='iconbtn' onclick={deselect}>
+                { icons.tick() }
             </button>
-        </Match>
-
-        <Match when={edit()}>
-            <div class={styles.edit}>
-                { textbox }
-                <button type='button' class='iconbtn' onclick={toggle}>
-                    { icons.tick() }
-                </button>
-            </div>
-        </Match>
-
-    </Switch> </div>
-
+        </div>
+    </div>
 }
