@@ -55,6 +55,12 @@ function down() {
 }
 
 
+function location() {
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
+        <path d="M13.229 0c-4.84 0-8.82 3.774-8.82 9.159 0 1.92.453 3.258 1.294 4.738l6.933 12.212a.678.678 0 0 0 1.187 0l6.932-12.212c.841-1.48 1.294-2.817 1.294-4.738 0-5.384-3.98-9.159-8.82-9.159zm0 4.749a4.07 4.07 0 1 1 0 8.14 4.07 4.07 0 0 1 0-8.14z"/>
+    </svg>
+}
+
 export default {
     minus,
     plus,
@@ -64,4 +70,5 @@ export default {
     clock,
     up,
     down,
+    location,
 }

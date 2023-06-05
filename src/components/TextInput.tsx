@@ -1,5 +1,5 @@
 
-import { Component, createSignal } from 'solid-js';
+import { Component, createSignal, Show } from 'solid-js';
 
 import icons from '../icons';
 import styles from './css/TextInput.module.css';
@@ -9,25 +9,14 @@ const onLoseFocus = onLoseFocusDirective
 
 type TextInputProps = {
     value: string,
+    placeholder: string,
     onchange: (value: string) => void,
+    onsubmit?: (value: string) => void,
     editonly?: boolean,
+    includeSubmit?: boolean,
     class?: string,
 }
 export const TextInput: Component<TextInputProps> = (props) => {
-
-    if( props.editonly ) {
-        return <div class={styles.textinput_container + ' ' + props.class}>
-            <div class={styles.edit}>
-                <input
-                    type='text'
-                    required
-                    placeholder='Item Name'
-                    value={ props.value }
-                    oninput={(e) => props.onchange(e.target.value)}
-                />
-            </div>
-        </div>
-    }
 
     let input: HTMLInputElement
     const [ selected, setSelected ] = createSignal(false)
@@ -35,6 +24,34 @@ export const TextInput: Component<TextInputProps> = (props) => {
     function select() {
         setSelected(true)
         input.focus()
+        input.value = props.value
+    }
+
+    function submit() {
+        if( props.onsubmit ) {
+            props.onsubmit(!!props.editonly ? props.value : input.value)
+        }
+        deselect()
+    }
+
+    if( props.editonly ) {
+        return <div class={styles.textinput_container + ' ' + props.class}>
+            <div class={styles.edit}>
+                <input
+                    type='text'
+                    required
+                    placeholder={props.placeholder}
+                    value={ props.value }
+                    oninput={(e) => props.onchange(e.target.value)}
+                    onkeyup={(e) => { if(e.key == 'Enter') {submit()} }}
+                />
+                <Show when={props.includeSubmit}>
+                    <button type='button' class='iconbtn' onclick={submit}>
+                        { icons.tick() }
+                    </button>
+                </Show>
+            </div>
+        </div>
     }
 
     return <div
@@ -57,13 +74,13 @@ export const TextInput: Component<TextInputProps> = (props) => {
             <input
                 type='text'
                 required
-                placeholder='Item Name'
+                placeholder={props.placeholder}
                 value={ props.value }
                 oninput={(e) => props.onchange(e.target.value)}
-                onkeyup={(e) => { if(e.key == 'Enter') {deselect()} }}
+                onkeyup={(e) => { if(e.key == 'Enter') {submit()} }}
                 ref={input!}
             />
-            <button type='button' class='iconbtn' onclick={deselect}>
+            <button type='button' class='iconbtn' onclick={submit}>
                 { icons.tick() }
             </button>
         </div>

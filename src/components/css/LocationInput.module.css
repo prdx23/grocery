@@ -1,0 +1,14 @@
+
+
+.locationinput {
+}
+
+.locationinput section {
+    position: absolute;
+    border: 1px solid var(--border-color);
+    background: var(--background);
+    margin-top: 8px;
+
+    display: flex;
+    flex-direction: column;
+}

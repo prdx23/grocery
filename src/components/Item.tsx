@@ -4,6 +4,7 @@ import type { Store, SetStoreFunction } from "solid-js/store";
 import { createMemo } from "solid-js";
 
 import styles from './Item.module.css';
+import { addPopup } from './Popup';
 
 
 export type ExpiryDate = Date | 'none'
@@ -58,25 +59,27 @@ export class Items {
     static add(location: string, newItem: Item) {
 
         if( this.items[location] === undefined ) {
-            console.error(`location ${location} does not exist`)
+            addPopup(`location '${location}' does not exist`)
             return
         }
 
         for( const [i, item] of this.items[location].entries() ) {
             if( item.name == newItem.name ) {
                 this.updateCount(location, i, item.count + newItem.count)
+                // addPopup('Item Updated!')
                 return
             }
         }
 
         this.setItems(produce(state => state[location].push(newItem)))
         this.save()
+        // addPopup('Item Added!')
     }
 
 
     static delete(location: string, id: number) {
         if( this.items[location] === undefined ) {
-            console.error(`location ${location} does not exist`)
+            addPopup(`location '${location}' does not exist`)
             return
         }
         this.setItems(produce(state => state[location].splice(id, 1)))
@@ -120,131 +123,58 @@ export class Items {
     }
 
 
-//     static addLocation(location: string) {
-//     check total locations limit
-//         if( this.items[location] !== undefined ) {
-//             console.error(`location ${location} already exists`)
-//             return
-//         }
-//         this.setItems(location, [])
-//         this.save()
-//     }
+    static changeItemLocation(location: string, id: number, newLocation: string) {
+        if( location == newLocation ) { return }
+        this.add(newLocation, {...this.items[location][id]})
+        this.delete(location, id)
+    }
 
-//     static deleteLocation(location: string) {
-//         if( this.items[location] === undefined ) {
-//             console.error(`location ${location} does not exist`)
-//             return
-//         }
-//         this.setItems(location, undefined!)
-//         this.save()
-//     }
+    static addLocation(location: string) {
+        if( this.locations().length >= 20 ) { return }
+        if( this.items[location] !== undefined ) {
+            addPopup(`'${location}' already exists`)
+            return
+        }
+        if( location == '' ) {
+            addPopup(`'${location}' is empty`)
+            return
+        }
+        this.setItems(location, [])
+        this.save()
+    }
+
+    static changeLocationName(location: string, newLocation: string) {
+        if( this.items[newLocation] !== undefined ) {
+            addPopup(`'${newLocation}' already exists`)
+            return false
+        }
+        if( ['Inventory', 'Archive', 'Shopping List'].includes(newLocation) ) {
+            addPopup(`'${newLocation}' is built-in and cannot be deleted`)
+            return false
+        }
+        this.setItems(newLocation, this.items[location])
+        this.setItems(location, [])
+        this.deleteLocation(location)
+        this.save()
+        return true
+    }
+
+    static deleteLocation(location: string) {
+        if( ['Inventory', 'Archive', 'Shopping List'].includes(location) ) {
+            addPopup(`'${location}' is built-in and cannot be deleted`)
+            return false
+        }
+        if( this.items[location].length != 0 ) {
+            addPopup(`'${location}' is not empty and cannot be deleted`)
+            return false
+        }
+        if( this.items[location] === undefined ) {
+            addPopup(`location '${location}' does not exist`)
+            return false
+        }
+        this.setItems(location, undefined!)
+        this.save()
+        return true
+    }
 
 }
-
-
-
-
-
-// export type LocationString = 'inventory' | 'shopping_list' | 'archive'
-// export type ExpiryDate = Date | 'none'
-
-// export type Item = {
-//     id: string,
-//     name: string,
-//     count: number,
-//     location: LocationString,
-//     expiry: ExpiryDate,
-// }
-
-// type ItemStore = Record<string, Item>
-
-
-// export class Items {
-
-//     static items: Store<ItemStore>
-//     static setItems: SetStoreFunction<ItemStore>;
-
-//     static locations = {
-//         'inventory': 'Inventory',
-//         'shopping_list': 'Shopping List',
-//         'archive': 'Archive',
-//     }
-
-//     static {
-//         const version = localStorage.getItem('data_version');
-//         const datastr = localStorage.getItem('data');
-
-//         let data
-//         if( version == '1' && datastr !== null ) {
-//             data = JSON.parse(datastr)
-//         } else {
-//             data = {}
-//         }
-
-//         const [ items, setItems ] = createStore<ItemStore>(data);
-//         this.items = items;
-//         this.setItems = setItems;
-//     }
-
-//     static save() {
-//         localStorage.setItem('data', JSON.stringify(unwrap(this.items)));
-//         localStorage.setItem('data_version', '1')
-//     }
-
-
-//     static list(location: LocationString) {
-//         return Object.values(this.items).filter((x) => x.location === location)
-//     }
-
-//     static locationDisplay(location: LocationString) {
-//         return this.locations[location]
-//     }
-
-//     static locationKeys() {
-//         return Object
-//             .keys(this.locations)
-//             .filter((x) => x !== 'shopping_list') as LocationString[]
-//     }
-
-//     // -------------------------------------------------------------
-
-//     static add(
-//         name: string, count: number,
-//         location?: LocationString, expiry?: ExpiryDate
-//     ) {
-//         const id = `${Date.now().toString(16)}-${Math.floor(Math.random()*9999)}`
-//         this.setItems(id, {
-//             id: id,
-//             name: name,
-//             count: Math.max(Math.min(count, 99), 1),
-//             location: location ? location : 'inventory',
-//             expiry: expiry ? expiry : 'none',
-//         });
-//         this.save()
-//     }
-
-//     static delete(id: string) {
-//         this.setItems(id, undefined!);
-//         this.save()
-//     }
-
-//     static updateCount(id: string, value: number) {
-//         this.setItems(id, 'count', Math.min(Math.max(value, 1), 99))
-//         this.save()
-//     }
-
-//     static updateName(id: string, name: string) {
-//         this.setItems(id, 'name', name)
-//         this.save()
-//     }
-
-//     static changeLocation(id: string, location: LocationString) {
-//         this.setItems(id, 'location', location)
-//         this.save()
-//     }
-
-//     static updateExpiry(id: string, expiry: ExpiryDate) {
-//         this.setItems(id, 'expiry', expiry)
-//         this.save()
-//     }
-// }

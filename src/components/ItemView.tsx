@@ -6,6 +6,7 @@ import { Item, ExpiryDate, Items } from './Item';
 import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
 import { ExpiryInput } from './ExpiryInput';
+import { LocationInput } from './LocationInput';
 import icons from '../icons';
 import styles from './css/ItemView.module.css';
 import { onLoseFocusDirective } from '../utils';
@@ -57,16 +58,6 @@ export const ItemView: Component<ItemViewProps> = (props) => {
         use:onLoseFocus={() => setSelected(false)}
     >
 
-        <Show when={props.location == 'Archive'}>
-            <button
-                class={styles.action}
-                onclick={() => Items.delete(props.location, props.id)}
-                title='Delete'
-            >
-                Delete
-            </button>
-        </Show>
-
         <Show when={props.location !== 'Archive'}>
             <button
                 class={styles.action + ' iconbtn'}
@@ -97,22 +88,34 @@ export const ItemView: Component<ItemViewProps> = (props) => {
             </button>
         </Show>
 
+        <Show when={props.location == 'Archive'}>
+            <button
+                // class={styles.action}
+                onclick={() => Items.delete(props.location, props.id)}
+                title='Delete'
+            >
+                Delete
+            </button>
+        </Show>
+
+
         <CountInput
             value={props.item.count}
-            onchange={(x) => Items.updateCount(props.location, props.id, x)}
+            onchange={x => Items.updateCount(props.location, props.id, x)}
         />
 
         <TextInput
             class={styles.name}
+            placeholder='Item Name'
             value={props.item.name}
-            onchange={(x) => Items.updateName(props.location, props.id, x)}
+            onchange={x => Items.updateName(props.location, props.id, x)}
         />
 
         <Show when={props.location !== 'Shopping List'}>
             <ExpiryInput
                 class={styles.expiry_display}
                 value={props.item.expiry}
-                onchange={(x) => Items.updateExpiry(props.location, props.id, x)}
+                onchange={x => Items.updateExpiry(props.location, props.id, x)}
             />
         </Show>
 
@@ -129,6 +132,16 @@ export const ItemView: Component<ItemViewProps> = (props) => {
         >
             { icons.down() }
         </button>
+
+        <Show when={props.location !== 'Shopping List'}>
+            <LocationInput
+                class={styles.action}
+                value={props.location}
+                onchange={newLocation => Items.changeItemLocation(
+                    props.location, props.id, newLocation
+                )}
+            />
+        </Show>
 
     </section>
 }

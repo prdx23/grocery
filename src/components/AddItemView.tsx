@@ -1,8 +1,7 @@
 
-import { createSignal, batch } from 'solid-js';
+import { Component, createSignal, batch } from 'solid-js';
 
-import { Items } from './Item'
-import type { ExpiryDate } from './Item'
+import { Items, ExpiryDate } from './Item'
 import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
 import { ExpiryInput } from './ExpiryInput';
@@ -10,7 +9,7 @@ import styles from './css/AddItemView.module.css';
 import { addPopup } from './Popup';
 
 
-const AddItemView = () => {
+const AddItemView:Component = () => {
 
     const [ name, setName ] = createSignal('')
     const [ count, setCount ] = createSignal(1)
@@ -27,14 +26,13 @@ const AddItemView = () => {
             setCount(1)
             setExpiry('none')
         })
-        addPopup('Item Added!')
     }
 
     return <form class={styles.additemview} onsubmit={addItem}>
 
         <CountInput editonly={true} value={count()} onchange={setCount} />
 
-        <TextInput editonly={true} value={name()} onchange={setName} />
+        <TextInput placeholder='Item Name' editonly={true} value={name()} onchange={setName} />
 
         <ExpiryInput editonly={true} value={expiry()} onchange={setExpiry} />
 
@@ -59,7 +57,7 @@ const AddItemView = () => {
 
         <button> Add </button>
     </form>
-};
+}
 
 export default AddItemView;
 

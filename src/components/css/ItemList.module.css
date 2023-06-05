@@ -14,12 +14,36 @@
 }
 
 .itemlist .empty {
-    margin-left: 75px;
+    margin-left: 83px;
 }
-.itemlist .heading {
-    margin: 0;
+
+.itemlist .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-left: 75px;
     margin-bottom: 15px;
+}
+
+.itemlist .action {
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+.header:hover .action, .header:focus-within .action {
+    visibility: visible;
+}
+
+.itemlist .heading {
+    margin: 4px 8px;
+    font-size: 28px;
+    color: var(--text-bright-color);
+}
+
+.itemlist .heading_input p,
+.itemlist .heading_input input {
+    margin: 0;
+    /* margin: -4px -8px; */
     font-size: 28px;
     color: var(--text-bright-color);
 }

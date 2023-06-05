@@ -82,7 +82,7 @@ export const ExpiryInput: Component<ExpiryInputProps> = (props) => {
                 <hr/>
             </div>
             <button type='button' onclick={resetExpiry}>
-                No Expiry
+                Remove Expiry
             </button>
         </section>
     }

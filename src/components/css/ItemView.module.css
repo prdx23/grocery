@@ -11,11 +11,11 @@
     flex-basis: 100%;
 }
 
-.expire_warning .name * {
+.expire_warning .name *, .expire_warning .expiry_display * {
     color: orange !important;
 }
 
-.expired .name * {
+.expired .name *, .expired .expiry_display * {
     color: red !important;
 }
 
