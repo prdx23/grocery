@@ -17,3 +17,8 @@ export function onLoseFocusDirective(node: Element, func: () => () => void) {
     onMount(() => document.addEventListener('click', handleClick, true))
     onCleanup(() => document.removeEventListener('click', handleClick, true))
 }
+
+
+window.addEventListener('keyup', (e) => {
+    if( e.code == 'CapsLock' ) { document.body.click() }
+})

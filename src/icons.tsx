@@ -35,11 +35,23 @@ function cart() {
 
 
 function clock() {
-    return <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 26.458 26.458">
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
         <path d="M3.875 3.875c-5.157 5.158-5.157 13.55 0 18.708 5.158 5.158 13.55 5.158 18.708 0 5.158-5.157 5.158-13.55 0-18.708-5.157-5.157-13.55-5.157-18.708 0zm.853 3.473 2.628-2.612 6.62 6.66 8.545-.023.01 3.703-10.091.03-7.712-7.758z"  transform="rotate(45 13.23 13.23)"/>
     </svg>
+}
 
 
+function up() {
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
+        <path d="M13.23 0 7.926 5.32l-5.302 5.32h7.297v15.818h6.614V10.641h7.298l-5.302-5.32L13.229 0z"/>
+    </svg>
+}
+
+
+function down() {
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.458 26.458">
+        <path d="m13.23 26.458 5.302-5.32 5.302-5.32h-7.298V0H9.922v15.818H2.625l5.302 5.32z"/>
+    </svg>
 }
 
 
@@ -50,4 +62,6 @@ export default {
     cross,
     cart,
     clock,
+    up,
+    down,
 }

@@ -1,12 +1,15 @@
 
-import { createSignal, Show, Switch, Match } from 'solid-js';
-import { Portal } from "solid-js/web";
+import { Component, createSignal, Show, Switch, Match } from 'solid-js';
+// import { Portal } from "solid-js/web";
 import { add, parse, differenceInCalendarDays } from 'date-fns'
 
 import { CountInput } from './CountInput';
-import type { ExpiryDate } from './Item';
+import { ExpiryDate } from './Item';
 import icons from '../icons';
 import styles from './css/ExpiryInput.module.css';
+import { onLoseFocusDirective } from '../utils';
+const onLoseFocus = onLoseFocusDirective
+
 
 
 type ExpiryInputProps = {
@@ -15,12 +18,7 @@ type ExpiryInputProps = {
     editonly?: boolean,
     class?: string,
 }
-
-
-export const ExpiryInput = (props: ExpiryInputProps) => {
-
-    const [ show, setShow ] = createSignal(false);
-    function toggle() { setShow((prev) => !prev) }
+export const ExpiryInput: Component<ExpiryInputProps> = (props) => {
 
     const today = new Date()
 
@@ -36,7 +34,6 @@ export const ExpiryInput = (props: ExpiryInputProps) => {
         props.onchange('none')
     }
 
-
     function displayDays() {
         let days = 1
         if( props.value != 'none' ) {
@@ -51,9 +48,50 @@ export const ExpiryInput = (props: ExpiryInputProps) => {
         return toISOStringWithTimezone(date).slice(0, 10)
     }
 
-    return <div class={styles.expiry_container + ' ' + props.class}>
+    const [ selected, setSelected ] = createSignal(false)
+    function toggle() { setSelected(prev => !prev) }
 
-        <Show when={!!props.editonly}>
+    function EditMenu() {
+        return <section style={selected() ? 'display:inherit':'display:none'}>
+            <div class={styles.days}>
+                {/* <input type='number' min='1'/> <p> Days </p> */}
+                <p> Days: </p>
+                <CountInput
+                    value={displayDays()}
+                    onchange={updateDays}
+                    editonly={true}
+                />
+            </div>
+            <div class={styles.or}>
+                <hr/>
+                <p> or </p>
+                <hr/>
+            </div>
+            <div class={styles.date}>
+                <p> Date: </p>
+                <input
+                    type='date'
+                    min={toISOStringWithTimezone(today).slice(0, 10)}
+                    value={displayDate()}
+                    onchange={(e) => updateDate(e.target.value)}
+                />
+            </div>
+            <div class={styles.or}>
+                <hr/>
+                <p> or </p>
+                <hr/>
+            </div>
+            <button type='button' onclick={resetExpiry}>
+                No Expiry
+            </button>
+        </section>
+    }
+
+    if( props.editonly ) {
+        return <div
+            class={styles.expiry_container + ' ' + props.class}
+            use:onLoseFocus={() => setSelected(false)}
+        >
             <button type='button' class={styles.mainbtn} onclick={toggle}>
                 <Show when={props.value == 'none'}>
                     Set Expiry
@@ -62,73 +100,44 @@ export const ExpiryInput = (props: ExpiryInputProps) => {
                     Expires in {displayDays()} days
                 </Show>
             </button>
+            <EditMenu />
+        </div>
+    }
+
+    return <div
+        class={styles.expiry_container + ' ' + props.class}
+        use:onLoseFocus={() => setSelected(false)}
+    >
+        <Show when={props.value == 'none'}>
+            <button
+                type='button'
+                class={styles.display_icon}
+                onclick={toggle}
+                title={'Set Expiry'}
+            >
+                <div class={styles.clockbtn}>{ icons.clock() }</div>
+            </button>
         </Show>
-
-        <Show when={!!!props.editonly}>
-            <Show when={props.value == 'none'}>
-                {/* <button */}
-                {/*     type='button' */}
-                {/*     class={styles.action + ' iconbtn ' + styles.clockbtn} */}
-                {/*     onclick={toggle} */}
-                {/*     title={'Set Expiry'} */}
-                {/* > */}
-                {/*     { icons.clock() } */}
-                {/* </button> */}
-
-                <button type='button' class={styles.display} onclick={toggle}>
-                    {/* Set Expiry */}
-                    <div class={styles.clockbtn}>{ icons.clock() }</div>
-                </button>
-            </Show>
-            <Show when={props.value != 'none'}>
-                <button type='button' class={styles.display} onclick={toggle}>
-                    Expires in {displayDays()} days
-                </button>
-            </Show>
+        <Show when={props.value != 'none' && displayDays() >= 0}>
+            <button
+                type='button'
+                class={styles.display}
+                onclick={toggle}
+            >
+                Expires in {displayDays()} days
+            </button>
         </Show>
-
-        <Show when={show()}>
-            <section>
-                <div class={styles.days}>
-                    {/* <input type='number' min='1'/> <p> Days </p> */}
-                    <p> Days: </p>
-                    <CountInput
-                        value={displayDays()}
-                        onchange={updateDays}
-                        editonly={true}
-                    />
-                </div>
-                <div class={styles.or}>
-                    <hr/>
-                    <p> or </p>
-                    <hr/>
-                </div>
-                <div class={styles.date}>
-                    <p> Date: </p>
-                    <input
-                        type='date'
-                        min={toISOStringWithTimezone(today).slice(0, 10)}
-                        value={displayDate()}
-                        onchange={(e) => updateDate(e.target.value)}
-                    />
-                </div>
-                <div class={styles.or}>
-                    <hr/>
-                    <p> or </p>
-                    <hr/>
-                </div>
-                <button type='button' onclick={resetExpiry}>
-                    No Expiry
-                </button>
-            </section>
+        <Show when={props.value != 'none' && displayDays() < 0}>
+            <button
+                type='button'
+                class={styles.display}
+                onclick={toggle}
+            >
+                Expired {-displayDays()} days ago
+            </button>
         </Show>
-
-        {/* <Portal mount={document.getElementById('modal')!}> */}
-        {/*     <div>My Content</div> */}
-        {/* </Portal> */}
-
+        <EditMenu />
     </div>
-
 }
 
 const toISOStringWithTimezone = (date: Date) => {

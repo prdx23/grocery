@@ -7,6 +7,7 @@ import { CountInput } from './CountInput';
 import { TextInput } from './TextInput';
 import { ExpiryInput } from './ExpiryInput';
 import styles from './css/AddItemView.module.css';
+import { addPopup } from './Popup';
 
 
 const AddItemView = () => {
@@ -26,6 +27,7 @@ const AddItemView = () => {
             setCount(1)
             setExpiry('none')
         })
+        addPopup('Item Added!')
     }
 
     return <form class={styles.additemview} onsubmit={addItem}>

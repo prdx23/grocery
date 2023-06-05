@@ -28,11 +28,24 @@
     visibility: hidden;
     white-space: nowrap;
 }
-.item:hover .action {
+
+.item:hover .action, .selected .action, .item:focus-within .action {
     visibility: visible;
 }
 
-.item:focus-within .action {
+ {
+    visibility: visible;
+}
+
+.item .expiry_display {
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+.show_expiry .expiry_display,
+.item:hover .expiry_display,
+.selected .expiry_display,
+.item:focus-within .expiry_display {
     visibility: visible;
 }
 

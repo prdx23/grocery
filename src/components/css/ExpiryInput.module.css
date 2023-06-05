@@ -68,6 +68,18 @@
 }
 
 .expiry_container .display {
+    border: 1px solid #00000000;
+    /* border: 1px dashed var(--border-color); */
+    /* padding: 4px 8px; */
+    background: none;
+    min-height: 28px;
+    text-align: left;
+    white-space: nowrap;
+    color: var(--border-color);
+    fill: var(--border-color);
+}
+
+.expiry_container .display_icon {
     /* border: 1px solid #00000000; */
     border: 1px dashed var(--border-color);
     /* padding: 4px 8px; */
@@ -79,8 +91,8 @@
     fill: var(--border-color);
 }
 
-.expiry_container .display:hover {
-    border: 1px dashed var(--text-color);
+.expiry_container .display:hover, .expiry_container .display_icon:hover {
+    border: 1px dashed var(--border-color);
     color: var(--text-color);
     fill: var(--text-color);
 }
