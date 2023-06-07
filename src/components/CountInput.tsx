@@ -4,6 +4,7 @@ import { Component, createSignal, Show } from 'solid-js';
 import icons from '../icons';
 import styles from './css/CountInput.module.css';
 import { onLoseFocusDirective } from '../utils';
+import { addPopup } from './Popup';
 const onLoseFocus = onLoseFocusDirective
 
 
@@ -45,6 +46,7 @@ export const CountInput: Component<CountProps> = (props) => {
             <IncButton x={props.value} show={true} />
         </div>
     }
+
 
 
     const [ selected, setSelected ] = createSignal(false)
